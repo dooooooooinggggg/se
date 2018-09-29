@@ -2,7 +2,8 @@
 #include <string.h>
 #include <stdlib.h>
 
-struct list {
+struct list
+{
   struct list *next;
   int key;
   int value;
@@ -15,27 +16,31 @@ int main()
 
   // Generate data
   int prev = 0;
-  for( int i = 0; i < 10; i++) {
+  for (int i = 0; i < 10; i++)
+  {
     p->next = (struct list *)malloc(sizeof(struct list));
     p = p->next;
-    p->key = prev + rand() % 5 + 1; 
+    p->key = prev + rand() % 5 + 1;
     p->value = rand() % 1000;
     p->next = NULL;
     prev = p->key;
   }
 
   // Print
-  for( p = Head.next; p != NULL; p = p->next) {
+  for (p = Head.next; p != NULL; p = p->next)
+  {
     printf("%d:%d\n", p->key, p->value);
   }
 
   // Search
   int key;
-  printf("Key>" );
+  printf("Key>");
   scanf("%d", &key);
 
-  for( p = Head.next; p != NULL; p = p->next) {
-    if (p->key != key) {
+  for (p = Head.next; p != NULL; p = p->next)
+  {
+    if (p->key != key)
+    {
       printf("%d:%d\n", p->key, p->value);
     }
   }

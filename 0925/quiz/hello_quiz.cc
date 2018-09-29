@@ -1,7 +1,7 @@
 #include <stdio.h>
 
-int main(){
+int main()
+{
     printf("hello, SFC!!\n");
     return 0;
 }
-
