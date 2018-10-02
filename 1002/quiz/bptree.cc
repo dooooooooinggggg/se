@@ -2,31 +2,35 @@
 #include <vector>
 #include <sys/time.h>
 
-void
-print_tree_core(NODE *n)
+void print_tree_core(NODE *n)
 {
-	printf("["); 
-	for (int i = 0; i < n->nkey; i++) {
-		if (!n->isLeaf) print_tree_core(n->chi[i]); 
-		printf("%d", n->key[i]); 
-		if (i != n->nkey-1 && n->isLeaf) putchar(' ');
+	printf("[");
+	for (int i = 0; i < n->nkey; i++)
+	{
+		if (!n->isLeaf)
+			print_tree_core(n->chi[i]);
+		printf("%d", n->key[i]);
+		if (i != n->nkey - 1 && n->isLeaf)
+			putchar(' ');
 	}
-	if (!n->isLeaf) print_tree_core(n->chi[n->nkey]);
+	if (!n->isLeaf)
+		print_tree_core(n->chi[n->nkey]);
 	printf("]");
 }
 
-void
-print_tree(NODE *node)
+void print_tree(NODE *node)
 {
 	print_tree_core(node);
-	printf("\n"); fflush(stdout);
+	printf("\n");
+	fflush(stdout);
 }
 
 NODE *
 alloc_leaf(NODE *parent)
 {
 	NODE *node;
-	if (!(node = (NODE *)calloc(1, sizeof(NODE)))) ERR;
+	if (!(node = (NODE *)calloc(1, sizeof(NODE))))
+		ERR;
 	node->isLeaf = true;
 	node->parent = parent;
 	node->nkey = 0;
@@ -38,7 +42,8 @@ NODE *
 alloc_internal(NODE *parent)
 {
 	NODE *node;
-	if (!(node = (NODE *)calloc(1, sizeof(NODE)))) ERR;
+	if (!(node = (NODE *)calloc(1, sizeof(NODE))))
+		ERR;
 	node->isLeaf = false;
 	node->parent = parent;
 	node->nkey = 0;
@@ -51,7 +56,8 @@ alloc_root(NODE *left, int rs_key, NODE *right)
 {
 	NODE *node;
 
-	if (!(node = (NODE *)calloc(1, sizeof(NODE)))) ERR;
+	if (!(node = (NODE *)calloc(1, sizeof(NODE))))
+		ERR;
 	node->parent = NULL;
 	node->isLeaf = false;
 	node->key[0] = rs_key;
@@ -67,9 +73,12 @@ find_leaf(NODE *node, int key)
 {
 	int kid;
 
-	if (node->isLeaf) return node;
-	for (kid = 0; kid < node->nkey; kid++) {
-		if (key < node->key[kid]) break;
+	if (node->isLeaf)
+		return node;
+	for (kid = 0; kid < node->nkey; kid++)
+	{
+		if (key < node->key[kid])
+			break;
 	}
 
 	return find_leaf(node->chi[kid], key);
@@ -79,80 +88,85 @@ NODE *
 insert_in_leaf(NODE *leaf, int key, DATA *data)
 {
 	int i;
-	if (key < leaf->key[0]) {
-		for (i = leaf->nkey; i > 0; i--) {
-			leaf->chi[i] = leaf->chi[i-1] ;
-			leaf->key[i] = leaf->key[i-1] ;
-		} 
+	if (key < leaf->key[0])
+	{
+		for (i = leaf->nkey; i > 0; i--)
+		{
+			leaf->chi[i] = leaf->chi[i - 1];
+			leaf->key[i] = leaf->key[i - 1];
+		}
 		leaf->key[0] = key;
 		leaf->chi[0] = (NODE *)data;
 	}
-	else { // Quiz
-    // Step 2. Insert the new key
+	else
+	{   // Quiz
+		// Step 2. Insert the new key
 	}
-  // Step 1. Increment the number of keys
+	// Step 1. Increment the number of keys
 
 	return leaf;
 }
 
-void 
-insert(int key, DATA *data)
+void insert(int key, DATA *data)
 {
 	NODE *leaf;
 
-	if (Root == NULL) {
+	if (Root == NULL)
+	{
 		leaf = alloc_leaf(NULL);
 		Root = leaf;
 	}
-	else {
+	else
+	{
 		leaf = find_leaf(Root, key);
 	}
 
-	if (leaf->nkey < (N-1)) {
+	if (leaf->nkey < (N - 1))
+	{
 		insert_in_leaf(leaf, key, data);
 	}
-	else { 
-    // Split (quiz at 10/09)
+	else
+	{
+		// Split (quiz at 10/09)
 	}
 }
 
-void
-init_root(void)
+void init_root(void)
 {
 	Root = NULL;
 }
 
-void
-search_core(const int key)
+void search_core(const int key)
 {
-  NODE *n = find_leaf(Root, key);
-	for (int i = 0; i < n->nkey+1; i++) {
-		if (n->key[i] == key) return;
+	NODE *n = find_leaf(Root, key);
+	for (int i = 0; i < n->nkey + 1; i++)
+	{
+		if (n->key[i] == key)
+			return;
 	}
-  cout << "Key not found: " << key << endl;
+	cout << "Key not found: " << key << endl;
 	ERR;
 }
 
-int 
-interactive()
+int interactive()
 {
-  int key;
+	int key;
 
-  std::cout << "Key: ";
-  std::cin >> key;
+	std::cout << "Key: ";
+	std::cin >> key;
 
-  return key;
+	return key;
 }
 
-int
-main(int argc, char *argv[])
+int main(int argc, char *argv[])
 {
 	init_root();
 
-  while (true) {
+	while (true)
+	{
 		insert(interactive(), NULL);
-    print_tree(Root);
-  }
+		print_tree(Root);
+	}
 
 	return 0;
 }
