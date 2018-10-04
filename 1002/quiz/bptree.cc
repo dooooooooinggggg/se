@@ -99,10 +99,30 @@ insert_in_leaf(NODE *leaf, int key, DATA *data)
 		leaf->chi[0] = (NODE *)data;
 	}
 	else
-	{   // Quiz
+	{ // Quiz
 		// Step 2. Insert the new key
+		// 2番目以降なのは確定
+		i = 0;
+		while (i < leaf->nkey)
+		{
+			i++;
+			if (key > leaf->key[i])
+			{
+				break;
+			}
+		}
+
+		for (int j = leaf->nkey - i; j > 0; j--)
+		{
+			leaf->chi[j] = leaf->chi[j - 1];
+			leaf->key[j] = leaf->key[j - 1];
+		}
+
+		leaf->key[i] = key;
+		leaf->chi[i] = leaf->chi[i + 1];
 	}
 	// Step 1. Increment the number of keys
+	leaf->nkey++;
 
 	return leaf;
 }
