@@ -136,10 +136,29 @@ void insert_in_temp(TEMP *temp, int key, void *ptr)
 	if (key < temp->key[0])
 	{
 		// Write your code
+		for (i = temp->nkey; i > 0; i--)
+		{
+			temp->chi[i] = temp->chi[i - 1];
+			temp->key[i] = temp->key[i - 1];
+		}
+		temp->key[0] = key;
+		temp->chi[0] = (NODE *)ptr;
 	}
 	else
 	{
 		// Write your code
+		for (i = 0; i < temp->nkey; i++)
+		{
+			if (key < temp->key[i])
+				break;
+		}
+		for (int j = temp->nkey; j > i; j--)
+		{
+			temp->chi[j] = temp->chi[j - 1];
+			temp->key[j] = temp->key[j - 1];
+		}
+		temp->key[i] = key;
+		temp->chi[i] = (NODE *)ptr;
 	}
 
 	temp->nkey++;
@@ -167,6 +186,14 @@ void copy_from_temp_to_left(TEMP temp, NODE *left)
 void copy_from_temp_to_right(TEMP temp, NODE *right)
 {
 	// Write your code
+	int j = 0;
+	for (int i = (int)ceil(N / 2); i < N; i++)
+	{
+		right->key[j] = temp.key[i];
+		right->chi[j] = temp.chi[i];
+		right->nkey++;
+		j++;
+	}
 }
 
 void copy_from_temp_to_left_parent(TEMP *temp, NODE *left)
