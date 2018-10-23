@@ -135,7 +135,6 @@ void insert_in_temp(TEMP *temp, int key, void *ptr)
 	int i;
 	if (key < temp->key[0])
 	{
-		// Write your code
 		for (i = temp->nkey; i > 0; i--)
 		{
 			temp->chi[i] = temp->chi[i - 1];
@@ -146,7 +145,6 @@ void insert_in_temp(TEMP *temp, int key, void *ptr)
 	}
 	else
 	{
-		// Write your code
 		for (i = 0; i < temp->nkey; i++)
 		{
 			if (key < temp->key[i])
