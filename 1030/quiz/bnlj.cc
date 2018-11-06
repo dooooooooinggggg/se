@@ -33,7 +33,7 @@ printDiff(struct timeval begin, struct timeval end)
   printf("Diff: %ld us (%ld ms)\n", diff, diff/1000);
 }
 
-int 
+int
 main(void)
 {
   int rfd;

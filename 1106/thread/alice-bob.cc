@@ -28,7 +28,7 @@ createAlice(void)
   pthread_t thread;
 
   if (pthread_create(&thread, NULL, alice, NULL)) ERR;
-  
+
   return thread;
 }
 
@@ -38,7 +38,7 @@ createBob(void)
   pthread_t thread;
 
   if (pthread_create(&thread, NULL, bob, NULL)) ERR;
-  
+
   return thread;
 }
 

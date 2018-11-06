@@ -246,6 +246,22 @@ void insert_after_left_child(NODE *parent, NODE *left_child, int rs_key, NODE *r
 	// 2. Making spaces for new key and new ptr
 	// 3. Insert rs_key and right_child
 	// 4. Increment parent->nkey
+	i = 0;
+	while (i < parent->nkey)
+	{
+		if (rs_key < parent->key[i])
+			break;
+		i++;
+	}
+	for (int j = parent->nkey; j > i; j--)
+	{
+		parent->key[j] = parent->key[j - 1];
+		parent->chi[j] = parent->chi[j - 1];
+	}
+	parent->key[i] = rs_key;
+	parent->chi[i] = right_child;
+
+	parent->nkey++;
 }
 
 void insert_temp_after_left_child(TEMP *temp, NODE *left_child, int rs_key, NODE *right_child)
