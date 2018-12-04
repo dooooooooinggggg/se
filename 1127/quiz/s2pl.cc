@@ -25,13 +25,13 @@ void transaction(int wid, int tx)
     int oid = ComWorker[wid].tx[tx].opr[i];
     pthread_mutex_lock(&Obj[oid].lock);
     Obj[oid].val = oid * 10;
-    /* history[ ???] = ??? */
+    history[i] = oid;
   }
 
   // Shrinking phase
   for (int i = 0; i < NUM_ACCESS; i++)
   {
-    pthread_mutex_unlock(/* ??? */);
+    pthread_mutex_unlock(&Obj[history[i]].lock);
   }
 }
 
