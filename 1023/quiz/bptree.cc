@@ -288,8 +288,6 @@ void print_temp(TEMP t)
 void insert_in_parent(NODE *left_child, int rs_key, NODE *right_child)
 {
 	NODE *left_parent;
-	NODE *right_parent;
-
 	if (left_child == Root)
 	{
 		Root = alloc_root(left_child, rs_key, right_child);
@@ -302,8 +300,18 @@ void insert_in_parent(NODE *left_child, int rs_key, NODE *right_child)
 		insert_after_left_child(left_parent, left_child, rs_key, right_child);
 	}
 	else
-	{   // split
-		// Write your code here!
+	{
+		TEMP temp;
+		copy_from_left_to_temp(&temp, left_parent);
+		insert_in_temp(&temp, rs_key, NULL);
+		erase_entries(left_parent);
+		NODE *right_parent;
+		copy_from_temp_to_left_parent(&temp, left_parent);
+
+		// Let K = T.K(n + 1) / 2
+
+		copy_from_temp_to_right_parent(&temp, right_parent);
+		insert_in_parent(left_parent, rs_key, right_parent);
 	}
 }
 
