@@ -193,15 +193,14 @@ void copy_from_temp_to_left_parent(TEMP *temp, NODE *left)
 void copy_from_temp_to_right_parent(TEMP *temp, NODE *right)
 {
 	int id;
-
 	for (id = ((int)ceil((N + 1) / 2) + 1); id < N; id++)
 	{
-		right->chi[id - ((int)ceil((N + 1) / 2) + 1)] = temp->chi[id];
-		right->key[id - ((int)ceil((N + 1) / 2) + 1)] = temp->key[id];
+		right->chi[id - ((int)ceil((N + 1) / 2) + 1)] = temp->chi[id]; // ここで落ちてる
+		right->key[id - ((int)ceil((N + 1) / 2) + 1)] = temp->key[id]; // ここでも落ちる，tempがおかしそう
 		right->nkey++;
 	}
-	right->chi[id - ((int)ceil((N + 1) / 2) + 1)] = temp->chi[id];
 
+	right->chi[id - ((int)ceil((N + 1) / 2) + 1)] = temp->chi[id];
 	for (int i = 0; i < right->nkey + 1; i++)
 		right->chi[i]->parent = right;
 }
@@ -303,15 +302,14 @@ void insert_in_parent(NODE *left_child, int rs_key, NODE *right_child)
 	{
 		TEMP temp;
 		copy_from_left_to_temp(&temp, left_parent);
-		insert_in_temp(&temp, rs_key, NULL);
+		insert_temp_after_left_child(&temp, left_child, rs_key, right_child);
+		print_temp(temp);
 		erase_entries(left_parent);
-		NODE *right_parent;
+		NODE *right_parent = alloc_internal(NULL);
 		copy_from_temp_to_left_parent(&temp, left_parent);
-
-		// Let K = T.K(n + 1) / 2
-
+		int thisKey = temp.key[(int)ceil((N + 1) / 2)];
 		copy_from_temp_to_right_parent(&temp, right_parent);
-		insert_in_parent(left_parent, rs_key, right_parent);
+		insert_in_parent(left_parent, thisKey, right_parent);
 	}
 }
 
