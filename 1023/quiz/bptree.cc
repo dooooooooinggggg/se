@@ -303,9 +303,8 @@ void insert_in_parent(NODE *left_child, int rs_key, NODE *right_child)
 		TEMP temp;
 		copy_from_left_to_temp(&temp, left_parent);
 		insert_temp_after_left_child(&temp, left_child, rs_key, right_child);
-		print_temp(temp);
 		erase_entries(left_parent);
-		NODE *right_parent = alloc_internal(NULL);
+		NODE *right_parent = alloc_internal(left_parent->parent);
 		copy_from_temp_to_left_parent(&temp, left_parent);
 		int thisKey = temp.key[(int)ceil((N + 1) / 2)];
 		copy_from_temp_to_right_parent(&temp, right_parent);
@@ -386,6 +385,13 @@ int main(int argc, char *argv[])
 		insert(interactive(), NULL);
 		print_tree(Root);
 	}
+
+	// for (int i = 0; i < 100000; i++)
+	// {
+	// 	insert(i, NULL);
+	// 	// print_tree(Root);
+	// }
+	// print_tree(Root);
 
 	return 0;
 }
