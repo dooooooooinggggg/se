@@ -1,0 +1,17 @@
+g++ -g -c -Wall -O0 -std=c++11 main.cc
+main.cc: In function ‘void normal(int)’:
+main.cc:101:29: error: ‘i’ was not declared in this scope
+     printf("Current: %d\n", i);
+                             ^
+main.cc: In function ‘void state_check()’:
+main.cc:123:23: error: ‘k’ was not declared in this scope
+   for( int p = 0; p < k; p++) {
+                       ^
+main.cc:124:9: error: ‘RLOG’ was not declared in this scope
+     if( RLOG[p].before_image != Obj[ RLOG[p].pageID ].val)ERR;
+         ^~~~
+main.cc:125:10: error: ‘RLOG’ was not declared in this scope
+     Obj[ RLOG[p].pageID ].val = RLOG[p].after_image;
+          ^~~~
+Makefile:16: ターゲット 'main.o' のレシピで失敗しました
+make: *** [main.o] エラー 1
