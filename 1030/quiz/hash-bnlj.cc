@@ -13,50 +13,50 @@
 #define NB_BUFR (SZ_PAGE * 2 / sizeof(TUPLE))
 #define NB_BUFS (SZ_PAGE * 16 / sizeof(TUPLE))
 
-typedef struct _TUPLE {
+typedef struct _TUPLE
+{
   int key;
   int val;
 } TUPLE;
 
-typedef struct _RESULT {
+typedef struct _RESULT
+{
   int rkey;
   int rval;
   int skey;
   int sval;
 } RESULT;
 
-typedef struct _HASHOBJ {
+typedef struct _HASHOBJ
+{
   TUPLE tuple;
   struct _HASHOBJ *nxt;
 } HASHOBJ;
 
-typedef struct _BUCKET {
+typedef struct _BUCKET
+{
   HASHOBJ head;
   HASHOBJ *tail;
 } BUCKET;
 
 #define NB_BUCKET NB_BUFR
 
-
-void
-printDiff(struct timeval begin, struct timeval end)
+void printDiff(struct timeval begin, struct timeval end)
 {
   long diff;
 
   diff = (end.tv_sec - begin.tv_sec) * 1000 * 1000 + (end.tv_usec - begin.tv_usec);
-  printf("Diff: %ld us (%ld ms)\n", diff, diff/1000);
+  printf("Diff: %ld us (%ld ms)\n", diff, diff / 1000);
 }
 
-long
-calcDiff(struct timeval begin, struct timeval end)
+long calcDiff(struct timeval begin, struct timeval end)
 {
   long diff;
   diff = (end.tv_sec - begin.tv_sec) * 1000 * 1000 + (end.tv_usec - begin.tv_usec);
   return diff;
 }
 
-int 
-main(void)
+int main(void)
 {
   int rfd;
   int sfd;
@@ -70,30 +70,51 @@ main(void)
   BUCKET bucket[NB_BUCKET];
 
   gettimeofday(&begin, NULL);
-  rfd = open("R", O_RDONLY); if (rfd == -1) ERR;
-  sfd = open("S", O_RDONLY); if (sfd == -1) ERR;
+  rfd = open("R", O_RDONLY);
+  if (rfd == -1)
+    ERR;
+  sfd = open("S", O_RDONLY);
+  if (sfd == -1)
+    ERR;
   bzero(bucket, sizeof(BUCKET) * NB_BUCKET);
 
   int cnt = 0;
   long iodiff = 0;
   long joindiff = 0;
 
-  while (true) {
+  while (true)
+  {
     nr = read(rfd, bufR, NB_BUFR * sizeof(TUPLE));
-    if (nr == -1) ERR; else if (nr == 0) break;
+    if (nr == -1)
+      ERR;
+    else if (nr == 0)
+      break;
 
-    /* Write your code [Cleanup hash bucket]*/
-
+    /* Write your code [Cleanup hash bucket] */
+    bzero(bucket, (sizeof(BUCKET)) * NB_BUCKET);
     /* Write your code [Construct Hash] */
+    for (int i = 0; i < NB_BUFR; i++)
+    {
+      // printf("keyR:%d\n", bufR[i].key);
 
-    if ((lseek(sfd, 0, SEEK_SET)) == -1) ERR;    
-    while (true) {
+      bucket[i].head.tuple = bufR[i];
+      bucket[i].tail = &bucket[i].head;
+    }
+
+    if ((lseek(sfd, 0, SEEK_SET)) == -1)
+      ERR;
+
+    while (true)
+    {
       struct timeval bio, eio;
       struct timeval bjoin, ejoin;
 
       gettimeofday(&bio, NULL);
       ns = read(sfd, bufS, NB_BUFS * sizeof(TUPLE));
-      if (ns == -1) ERR; else if (ns == 0) break;
+      if (ns == -1)
+        ERR;
+      else if (ns == 0)
+        break;
       gettimeofday(&eio, NULL);
       iodiff += calcDiff(bio, eio);
 
@@ -101,6 +122,12 @@ main(void)
 
       gettimeofday(&bjoin, NULL);
       /* Write your code [Exec Join] */
+      for (int i = 0; i < NB_BUFS; i++)
+      {
+        // printf("keyS:%d\n", bufS[i].key);
+        // bucket[i].head.tuple = bufS[i];
+      }
+
       gettimeofday(&ejoin, NULL);
       joindiff += calcDiff(bjoin, ejoin);
     }
@@ -109,8 +136,8 @@ main(void)
 
   printDiff(begin, end);
   printf("Result: %d\n", resultVal);
-  //printf("iodiff: %ld\n", iodiff);
-  //printf("joindiff: %ld\n", joindiff);
+  printf("iodiff: %ld\n", iodiff);
+  printf("joindiff: %ld\n", joindiff);
 
   return 0;
 }

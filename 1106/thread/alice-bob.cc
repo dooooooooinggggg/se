@@ -3,7 +3,8 @@
 void *
 alice(void *a)
 {
-  while (true) {
+  while (true)
+  {
     printf("I am alice\n");
     sleep(1);
   }
@@ -14,7 +15,8 @@ alice(void *a)
 void *
 bob(void *a)
 {
-  while (true) {
+  while (true)
+  {
     printf("I am bob\n");
     sleep(1);
   }
@@ -27,7 +29,8 @@ createAlice(void)
 {
   pthread_t thread;
 
-  if (pthread_create(&thread, NULL, alice, NULL)) ERR;
+  if (pthread_create(&thread, NULL, alice, NULL))
+    ERR;
 
   return thread;
 }
@@ -37,24 +40,25 @@ createBob(void)
 {
   pthread_t thread;
 
-  if (pthread_create(&thread, NULL, bob, NULL)) ERR;
+  if (pthread_create(&thread, NULL, bob, NULL))
+    ERR;
 
   return thread;
 }
 
-void
-createThreads(void)
+void createThreads(void)
 {
   pthread_t thAlice, thBob;
 
   thAlice = createAlice();
   thBob = createBob();
-  if (pthread_join(thAlice, NULL)) ERR;
-  if (pthread_join(thBob, NULL)) ERR;
+  if (pthread_join(thAlice, NULL))
+    ERR;
+  if (pthread_join(thBob, NULL))
+    ERR;
 }
 
-int
-main(void)
+int main(void)
 {
   createThreads();
 

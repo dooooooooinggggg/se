@@ -6,20 +6,21 @@
 #include <fcntl.h>
 
 #define FILE "FILE"
-#define MAX (1000*1000)
-typedef struct _DATA {
+#define MAX (1000 * 1000)
+typedef struct _DATA
+{
   int key;
   int value;
 } DATA;
 
-int
-main(void)
+int main(void)
 {
   int fd;
   DATA d;
-  fd = open(FILE, O_WRONLY|O_CREAT, 0644);
+  fd = open(FILE, O_WRONLY | O_CREAT, 0644);
 
-  for (int i = 0; i < MAX; i++) {
+  for (int i = 0; i < MAX; i++)
+  {
     write(fd, &d, sizeof(DATA));
   }
 

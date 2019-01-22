@@ -71,6 +71,7 @@ alloc_root(NODE *left, int rs_key, NODE *right)
 NODE *
 find_leaf(NODE *node, int key)
 {
+	// printf("in find_leaf\n");
 	int kid;
 
 	if (node->isLeaf)
@@ -360,7 +361,10 @@ void search_core(const int key)
 	for (int i = 0; i < n->nkey + 1; i++)
 	{
 		if (n->key[i] == key)
+		{
+			// printf("あった\n");
 			return;
+		}
 	}
 	cout << "Key not found: " << key << endl;
 	ERR;
@@ -380,18 +384,34 @@ int main(int argc, char *argv[])
 {
 	init_root();
 
-	while (true)
+	// while (true)
+	// {
+	// 	insert(interactive(), NULL);
+	// 	print_tree(Root);
+	// }
+
+	if (argc < 2)
 	{
-		insert(interactive(), NULL);
-		print_tree(Root);
+		printf("must arg\n");
+		exit(1);
 	}
 
-	// for (int i = 0; i < 100000; i++)
-	// {
-	// 	insert(i, NULL);
-	// 	// print_tree(Root);
-	// }
-	// print_tree(Root);
+	for (int i = 0; i < atoi(argv[1]); i++)
+	{
+		int tmpKey = rand();
+		// printf("%d\n", tmpKey);
+		// insert(tmpKey, NULL);
+		insert(i, NULL);
+	}
+	print_tree(Root);
+
+	for (int i = 0; i < atoi(argv[1]); i++)
+	{
+		// int key;
+		// printf("key:");
+		// scanf("%d", &key);
+		search_core(i);
+	}
 
 	return 0;
 }

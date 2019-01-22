@@ -12,29 +12,29 @@
 #define NB_BUFR (SZ_PAGE * 2 / sizeof(TUPLE))
 #define NB_BUFS (SZ_PAGE * 16 / sizeof(TUPLE))
 
-typedef struct _TUPLE {
+typedef struct _TUPLE
+{
   int key;
   int val;
 } TUPLE;
 
-typedef struct _RESULT {
+typedef struct _RESULT
+{
   int rkey;
   int rval;
   int skey;
   int sval;
 } RESULT;
 
-void
-printDiff(struct timeval begin, struct timeval end)
+void printDiff(struct timeval begin, struct timeval end)
 {
   long diff;
 
   diff = (end.tv_sec - begin.tv_sec) * 1000 * 1000 + (end.tv_usec - begin.tv_usec);
-  printf("Diff: %ld us (%ld ms)\n", diff, diff/1000);
+  printf("Diff: %ld us (%ld ms)\n", diff, diff / 1000);
 }
 
-int
-main(void)
+int main(void)
 {
   int rfd;
   int sfd;
@@ -46,18 +46,31 @@ main(void)
   int resultVal = 0;
   struct timeval begin, end;
 
-  rfd = open("R", O_RDONLY); if (rfd == -1) ERR;
-  sfd = open("S", O_RDONLY); if (sfd == -1) ERR;
+  rfd = open("R", O_RDONLY);
+  if (rfd == -1)
+    ERR;
+  sfd = open("S", O_RDONLY);
+  if (sfd == -1)
+    ERR;
 
   gettimeofday(&begin, NULL);
-  while (true) {
+  while (true)
+  {
     nr = read(rfd, bufR, NB_BUFR * sizeof(TUPLE));
-    if (nr == -1) ERR; else if (nr == 0) break;
+    if (nr == -1)
+      ERR;
+    else if (nr == 0)
+      break;
 
-    if ((lseek(sfd, 0, SEEK_SET)) == -1) ERR;
-    while (true) {
+    if ((lseek(sfd, 0, SEEK_SET)) == -1)
+      ERR;
+    while (true)
+    {
       ns = read(sfd, bufS, NB_BUFS * sizeof(TUPLE));
-      if (ns == -1) ERR; else if (ns == 0) break;
+      if (ns == -1)
+        ERR;
+      else if (ns == 0)
+        break;
 
       // join
       /* Write your code here */

@@ -3,7 +3,8 @@
 
 using namespace std;
 
-typedef struct _DATA_OBJ{
+typedef struct _DATA_OBJ
+{
   string line;
   bool wroteAlice;
 } DATA_OBJ;
@@ -11,10 +12,10 @@ typedef struct _DATA_OBJ{
 pthread_mutex_t Lock;
 DATA_OBJ DataObj;
 
-void 
-init(void)
+void init(void)
 {
-  if (pthread_mutex_init(&Lock, NULL)) ERR;
+  if (pthread_mutex_init(&Lock, NULL))
+    ERR;
   DataObj.wroteAlice = false;
 }
 
@@ -23,18 +24,24 @@ alice(void *a)
 {
   string line;
 
-  while (true) {
-    if (pthread_mutex_lock(&Lock)) ERR;
-    if (DataObj.wroteAlice == false) {
+  while (true)
+  {
+    if (pthread_mutex_lock(&Lock))
+      ERR;
+    if (DataObj.wroteAlice == false)
+    {
       printf("[I am Alice] message? ");
       getline(cin, line);
       //cout << endl;
       DataObj.line = line;
       DataObj.wroteAlice = true;
-      if (pthread_mutex_unlock(&Lock)) ERR;
+      if (pthread_mutex_unlock(&Lock))
+        ERR;
     }
-    else {
-      if (pthread_mutex_unlock(&Lock)) ERR;
+    else
+    {
+      if (pthread_mutex_unlock(&Lock))
+        ERR;
       sleep(1);
     }
   }
@@ -45,13 +52,17 @@ alice(void *a)
 void *
 bob(void *a)
 {
-  while (true) {
-    if (pthread_mutex_lock(&Lock)) ERR;    
-    if (DataObj.wroteAlice == true) {
+  while (true)
+  {
+    if (pthread_mutex_lock(&Lock))
+      ERR;
+    if (DataObj.wroteAlice == true)
+    {
       cout << " [I am Bob ] message: " << DataObj.line << endl;
       DataObj.wroteAlice = false;
     }
-    if (pthread_mutex_unlock(&Lock)) ERR; 
+    if (pthread_mutex_unlock(&Lock))
+      ERR;
   }
 
   return NULL;
@@ -62,8 +73,9 @@ createAlice(void)
 {
   pthread_t thread;
 
-  if (pthread_create(&thread, NULL, alice, NULL)) ERR;
-  
+  if (pthread_create(&thread, NULL, alice, NULL))
+    ERR;
+
   return thread;
 }
 
@@ -72,24 +84,25 @@ createBob(void)
 {
   pthread_t thread;
 
-  if (pthread_create(&thread, NULL, bob, NULL)) ERR;
-  
+  if (pthread_create(&thread, NULL, bob, NULL))
+    ERR;
+
   return thread;
 }
 
-void
-createThreads(void)
+void createThreads(void)
 {
   pthread_t thAlice, thBob;
 
   thAlice = createAlice();
   thBob = createBob();
-  if (pthread_join(thAlice, NULL)) ERR;
-  if (pthread_join(thBob, NULL)) ERR;
+  if (pthread_join(thAlice, NULL))
+    ERR;
+  if (pthread_join(thBob, NULL))
+    ERR;
 }
 
-int
-main(void)
+int main(void)
 {
   createThreads();
 
